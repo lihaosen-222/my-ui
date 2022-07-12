@@ -1,32 +1,41 @@
 // import 'antd/dist/antd.css'
+import "antd/lib/skeleton/style/index.less";
 import "./App.less";
 import { Card } from "antd";
-import { getTodayStatus } from "./service";
+import { getTodayStatus, getWinStatus } from "./service";
 
 import { useRequest } from "ahooks";
 
 function App() {
-  const { data, loading } = useRequest(getTodayStatus);
-  const signInFlag = data?.data?.data;
+  
+  const { data: todayStatus, loading: signInLoading } = useRequest(async () => {
+    const res = await getTodayStatus();
+    return res?.data?.data;
+  });
+
+  const { data: winRender, loading: winStatusLoading } = useRequest(
+    async () => {
+      const res = await getWinStatus();
+      const list = res?.data || [];
+      list.shift(); // 丢去 null
+      console.log(list)
+      return list.map((item: any, index: number) => (
+        <div key={index}>
+          {index}: 绑定{item?.name}
+        </div>
+      ));
+    }
+  );
 
   return (
     <div className="App">
-      <Card title="掘金签到" className="signIn" loading={loading}>
+      <Card title="掘金签到" className="signIn" loading={signInLoading}>
         今日
-        {signInFlag ? "已" : "未"}
+        {todayStatus ? "已" : "未"}
         签到
       </Card>
-      <Card title="界面热键" className="winHotKey">
-        1：绑定 谷歌浏览器
-        <br />
-        2：绑定 vscode
-        <br />
-        3：绑定 oneNote
-        <br />
-        4：未绑定
-        <br />
-        5：未绑定
-        <br />
+      <Card title="界面热键" className="winHotKey" loading={winStatusLoading}>
+        {winRender}
       </Card>
     </div>
   );
