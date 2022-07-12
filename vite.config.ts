@@ -23,9 +23,10 @@ export default defineConfig({
     },
   },
   server: {
-    proxy: {
+    port: 3003,
+    proxy: {  // 测试时用 3000， 运行时用相对
       '/api': {
-        target: 'http://127.0.0.1:3001/',
+        target: 'http://localhost:3000/',
         changeOrigin: true,
       },
     }
