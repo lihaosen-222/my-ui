@@ -6,7 +6,8 @@ import vitePluginImp from "vite-plugin-imp";
 export default defineConfig({
   plugins: [
     react(),
-    vitePluginImp({ // 按需导入 antd 样式
+    vitePluginImp({
+      // 按需导入 antd 样式
       libList: [
         {
           libName: "antd",
@@ -15,20 +16,24 @@ export default defineConfig({
       ],
     }),
   ],
-  css: {  
+  css: {
     preprocessorOptions: {
-      less: { // 导入 less，得安装 less 包
+      less: {
+        // 导入 less，得安装 less 包
         javascriptEnabled: true,
       },
     },
   },
   server: {
     port: 3003,
-    proxy: {  // 测试时用 3000， 运行时用相对
-      '/api': {
-        target: 'http://localhost:3000/',
-        changeOrigin: true,
+    proxy: {
+      // 测试时用 3000， 运行时用相对
+      "/api": {
+        target: "http://localhost:3006/",
       },
-    }
-  }
+      "/socket.io": { // socket.io 默认走这个地址，要代理这个
+        target: "http://localhost:3006/",
+      },
+    },
+  },
 });

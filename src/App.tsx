@@ -1,10 +1,13 @@
 // import 'antd/dist/antd.css'
 import "antd/lib/skeleton/style/index.less";
 import "./App.less";
+import { io } from "socket.io-client";
 import { Card } from "antd";
 import { getTodayStatus, getWinStatus } from "./service";
 
 import { useRequest } from "ahooks";
+
+const socket = io();
 
 function App() {
   
@@ -36,6 +39,9 @@ function App() {
       </Card>
       <Card title="界面热键" className="winHotKey" loading={winStatusLoading}>
         {winRender}
+      </Card>
+      <Card title="test" className="winHotKey">
+        
       </Card>
     </div>
   );
