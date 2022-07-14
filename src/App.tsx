@@ -13,11 +13,13 @@ function App() {
   const [win, setWin] = useState([]);
 
   const winRender = useMemo(() => {
-    return win.map((item: any, index: number) => (
-      <div key={index}>
-        {index}: 绑定{item?.name}
-      </div>
-    ));
+    return win.map((item: any, index: number) => {
+      return (
+        <div key={index}>
+          {index}: {item?.hwnd?  <>绑定 <b>{item?.name}</b></>:'暂未绑定'} 
+        </div>
+      );
+    });
   }, [win]);
 
   const { data: todayStatus, loading: signInLoading } = useRequest(async () => {
@@ -39,7 +41,6 @@ function App() {
   // 之后添加一个 clean up 函数
   useEffect(() => {
     socket.on("update-win", (list) => {
-      console.log("res", list);
       setWin(list);
     });
     run();
@@ -55,7 +56,6 @@ function App() {
       <Card title="界面热键" className="winHotKey" loading={winLoading}>
         {winRender}
       </Card>
-      <Card title="test" className="winHotKey"></Card>
     </div>
   );
 }
